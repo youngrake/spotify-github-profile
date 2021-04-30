@@ -34,15 +34,14 @@ def make_svg(artist_name, song_name, img, is_now_playing, cover_image, theme):
     }
 
     if theme != 'default':
-      return render_template(f"spotify.{theme}.html.j2", **rendered_data)
+        return render_template(f"spotify.{theme}.html.j2", **rendered_data)
     else:
-      return render_template("spotify.html.j2", **rendered_data)
+        return render_template("spotify.html.j2", **rendered_data)
 
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):
-
     artist_name = "Spotify Github Profile"
     song_name = "Revolution with very long text - ft. someone"
 

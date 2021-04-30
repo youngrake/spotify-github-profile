@@ -28,27 +28,32 @@ app = Flask(__name__)
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):
-    code = request.args.get("code")
 
-    if code is None:
-        # TODO: no code
-        return Response("not ok")
+    try:
+        code = request.args.get("code")
 
-    token_info = spotify.generate_token(code)
-    access_token = token_info["access_token"]
+        if code is None:
+            # @TODO: no code
+            return Response("not ok")
 
-    spotify_user = spotify.get_user_profile(access_token)
-    user_id = spotify_user["id"]
+        token_info = spotify.generate_token(code)
+        access_token = token_info["access_token"]
 
-    doc_ref = db.collection("users").document(user_id)
-    doc_ref.set(token_info)
+        spotify_user = spotify.get_user_profile(access_token)
+        user_id = spotify_user["id"]
 
-    rendered_data = {
-        "uid": user_id,
-        "BASE_URL": spotify.BASE_URL,
-    }
+        doc_ref = db.collection("users").document(user_id)
+        doc_ref.set(token_info)
 
-    return render_template("callback.html.j2", **rendered_data)
+        rendered_data = {
+            "uid": user_id,
+            "BASE_URL": spotify.BASE_URL,
+        }
+
+        return render_template("callback.html.j2", **rendered_data)
+    except KeyError:
+        return redirect("/api/login")
+
 
 
 if __name__ == "__main__":
