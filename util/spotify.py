@@ -1,13 +1,10 @@
+import requests
+import os
 from base64 import b64encode
 
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
-
-import requests
-import json
-import os
-import random
 
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_SECRET_ID = os.getenv("SPOTIFY_SECRET_ID")
@@ -27,7 +24,6 @@ SPOTIFY_URL_USER_INFO = "https://api.spotify.com/v1/me"
 
 
 def get_authorization():
-
     return b64encode(f"{SPOTIFY_CLIENT_ID}:{SPOTIFY_SECRET_ID}".encode()).decode("ascii")
 
 
@@ -96,4 +92,3 @@ def get_now_playing(access_token):
 
     repsonse_json = response.json()
     return repsonse_json
-
